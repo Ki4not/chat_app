@@ -1,3 +1,4 @@
+import 'package:chat_app/auth/auth_service.dart';
 import 'package:chat_app/components/button.dart';
 import 'package:chat_app/components/textfield.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,22 @@ class RegisterPage extends StatelessWidget {
 
   RegisterPage({super.key, required this.onTap});
 
-  register() {
+  register(BuildContext context) async {
+    // auth service
+    final authService = AuthService();
 
+    try {
+      await authService.signUpWithEmailAndPassword(
+          _usernameController.text, _passwordController.text);
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text('User already exists. Please try again.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.red, fontSize: 16),),
+              ));
+    }
   }
 
   @override
@@ -58,7 +73,7 @@ class RegisterPage extends StatelessWidget {
           // signup button
           CustomButton(
             buttonText: 'Sign Up',
-            onTap: register,
+            onTap: () => register(context),
           ),
           const SizedBox(
             height: 10,
