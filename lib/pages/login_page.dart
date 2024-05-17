@@ -1,4 +1,4 @@
-import 'package:chat_app/auth/auth_service.dart';
+import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:chat_app/components/button.dart';
 import 'package:chat_app/components/textfield.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +36,7 @@ class LoginPage extends StatelessWidget {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           // icon
           const Icon(
-            FontAwesomeIcons.message,
+            FontAwesomeIcons.earListen,
             size: 100,
             color: Colors.blue,
           ),
@@ -45,7 +45,7 @@ class LoginPage extends StatelessWidget {
           ),
           // app name
           const Text(
-            'Chat App',
+            'ChikaTa!',
             style: TextStyle(
                 fontSize: 30, fontWeight: FontWeight.bold, color: Colors.blue),
           ),

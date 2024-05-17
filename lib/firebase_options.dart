@@ -83,4 +83,5 @@ class DefaultFirebaseOptions {
     authDomain: 'chatapp-5b5cb.firebaseapp.com',
     storageBucket: 'chatapp-5b5cb.appspot.com',
   );
+
 }
