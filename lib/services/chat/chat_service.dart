@@ -57,18 +57,5 @@ class ChatService{
     return _firestore.collection("Chat_Room").doc(chatRoomId).collection("Messages").orderBy("timestamp", descending: false).snapshots();
   }
 
-  // edit message
-  Future<void> editMessage(String messageId, String newMessage) async {
-    final currentUserId = _authService.currentUser!.uid;
-    String SenderId = _authService.currentUser!.uid;
-
-    if (currentUserId == SenderId) {
-      await _firestore
-          .collection("Chat_Room")
-          .doc(messageId)
-          .update({"message": newMessage});
-    }
-  }
-
 }
 

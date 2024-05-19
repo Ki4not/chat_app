@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class ChatPage extends StatefulWidget {
   final String name;
   final String receiverId;
-  ChatPage({super.key, required this.name, required this.receiverId});
+  const ChatPage({super.key, required this.name, required this.receiverId});
 
   @override
   State<ChatPage> createState() => _ChatPageState();

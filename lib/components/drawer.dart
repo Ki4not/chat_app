@@ -1,5 +1,6 @@
+import 'package:chat_app/pages/user_page.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
-import 'package:chat_app/pages/settings_page.dart';
+import 'package:chat_app/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -40,12 +41,24 @@ class DrawerItem extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(10,0,0,0),
             child: ListTile(
-              leading: const Icon(FontAwesomeIcons.gear, color: Colors.blue),
-              title: const Text('SETTINGS', style: TextStyle(letterSpacing: 5.0),),
+              leading: const Icon(FontAwesomeIcons.user, color: Colors.blue),
+              title: const Text('USERS', style: TextStyle(letterSpacing: 5.0),),
               onTap: () {
                 Navigator.pop(context);
 
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => UsersPage()));
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10,0,0,0),
+            child: ListTile(
+              leading: const Icon(FontAwesomeIcons.chartBar, color: Colors.blue),
+              title: const Text('PROFILE', style: TextStyle(letterSpacing: 5.0),),
+              onTap: () {
+                Navigator.pop(context);
+
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
               },
             ),
           ),],

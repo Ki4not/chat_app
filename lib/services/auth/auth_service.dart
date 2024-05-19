@@ -37,7 +37,8 @@ class AuthService{
         'uid': userCredential.user!.uid,
         'email': email,
         'fname': fname,
-        'lname': lname
+        'lname': lname,
+        'isDeactivated': false,
       });
 
       return userCredential;
@@ -51,5 +52,14 @@ class AuthService{
     await _auth.signOut();
   }
 
-  // error handling
+  // get user data
+  Future<Map<String, dynamic>?> getUserData(currentUserId) async {
+    final doc = _firestore.collection("Users").doc(currentUserId);
+    final snapshot = await doc.get();
+    if (snapshot.exists) {
+      return snapshot.data();
+    } else {
+      return null;
+    }
+  }
 }

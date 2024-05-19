@@ -26,3 +26,26 @@ class CustomButton extends StatelessWidget {
     );
   }
 }
+
+class ProfileButton extends StatelessWidget {
+  final String buttonText;
+  final Color buttonColor;
+  final Function()? onPressed;
+
+  const ProfileButton({super.key, required this.buttonText, required this.buttonColor, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed ?? () {},
+      style: ElevatedButton.styleFrom(
+        backgroundColor: buttonColor, 
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8), 
+        ),
+      ),
+      child: Text(buttonText, style: const TextStyle(color: Colors.white, fontSize: 16),),     
+      );
+  }
+}
