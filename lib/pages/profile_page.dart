@@ -3,8 +3,138 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+
+  void _deactivateAccount() async {
+    try {
+      String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+      await FirebaseFirestore.instance.collection('Users').doc(currentUserId) .update({'isDeactivated': true});
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text('Account Deactivated', 
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.red, fontSize: 20),),
+          )
+        )
+      );
+      await FirebaseAuth.instance.signOut();
+    }
+    catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(e.toString(), 
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.red, fontSize: 16)),
+          )
+        )
+      );
+    }
+  }
+
+  void _showEditProfileModal(BuildContext context, Map<String, dynamic> userData) {
+    TextEditingController fnameController = TextEditingController(text: userData['fname']);
+    TextEditingController lnameController = TextEditingController(text: userData['lname']);
+    TextEditingController emailController = TextEditingController(text: userData['email']);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: fnameController,
+                  decoration: InputDecoration(labelText: 'First Name', labelStyle: TextStyle(color: Colors.blue), enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                    ), focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                    ),
+                  )
+                ),
+                TextField(
+                  controller: lnameController,
+                  decoration: InputDecoration(labelText: 'Last Name', labelStyle: TextStyle(color: Colors.blue), enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                    ), focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                    ),
+                  ),
+                ),
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(labelText: 'Email', labelStyle: TextStyle(color: Colors.blue), enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                    ), focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                    ),
+                  )
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.blue),
+                  ),
+                  onPressed: () async {
+                    try {
+                      String userId = FirebaseAuth.instance.currentUser!.uid;
+                      await FirebaseFirestore.instance.collection('Users').doc(userId).update({
+                        'fname': fnameController.text,
+                        'lname': lnameController.text,
+                        'email': emailController.text,
+                      });
+                      Navigator.of(context).pop();
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Profile Updated', 
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.blue, fontSize: 20),),
+                          )
+                        )
+                      );
+                    } catch (e) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(e.toString(), 
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.red, fontSize: 16),),
+                          )
+                        )
+                      );
+                    }
+                  },
+                  child: const Text('Save Changes', style: TextStyle(color: Colors.white),)
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +177,8 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(height: 20),
                     Text(
                       userName,
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue, letterSpacing: 3.0),
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue, letterSpacing: 3.0, ),
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 10),
                     Text(
@@ -56,12 +187,12 @@ class ProfilePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 50),
                     
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ProfileButton(buttonText: 'Edit Profile', buttonColor: Colors.blue),
-                        SizedBox(width: 20),
-                        ProfileButton(buttonText: 'Deactivate', buttonColor: Colors.red),
+                        ProfileButton(buttonText: 'Edit Profile', buttonColor: Colors.blue, onPressed: () => _showEditProfileModal(context, userData),),
+                        const SizedBox(width: 20),
+                        ProfileButton(buttonText: 'Deactivate', buttonColor: Colors.red, onPressed: _deactivateAccount,),
                       ],
                     ),
 

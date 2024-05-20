@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UsersPage extends StatefulWidget {
   
-  UsersPage({super.key});
+  const UsersPage({super.key});
 
   @override
   State<UsersPage> createState() => _UsersPageState();
